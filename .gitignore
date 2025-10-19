@@ -1,0 +1,28 @@
+# Ignore system files
+.DS_Store
+Thumbs.db
+
+# Ignore node modules
+node_modules/
+
+# Ignore build outputs
+dist/
+build/
+out/
+
+# Ignore environment variables
+.env
+.env.local
+
+# Ignore logs
+*.log
+logs/
+
+# Ignore IDE and editor folders
+.vscode/
+.idea/
+
+# Ignore Python virtual environments
+venv/
+__pycache__/
+*.pyc

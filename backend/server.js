@@ -1,0 +1,120 @@
+import express from "express";
+import dotenv from "dotenv";
+import cookieParser from "cookie-parser";
+import cors from "cors";
+import path from "path";
+import { fileURLToPath } from 'url';
+
+import authRoutes from "./routes/auth.route.js";
+import medicalFileRoutes from "./routes/medicalFile.route.js";
+import vitalsRoutes from "./routes/vitals.route.js";
+
+import { connectDB } from "./lib/db.js";
+
+// Get current directory for ES modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Load environment variables
+dotenv.config({ path: path.join(__dirname, '.env') });
+
+// Set environment variables directly if not loaded
+if (!process.env.MONGO_URI) {
+	process.env.MONGO_URI = "mongodb://localhost:27017/healthmate";
+}
+if (!process.env.JWT_SECRET) {
+	process.env.JWT_SECRET = "farhan_healthmate_2024_secure_jwt_key_123456789";
+}
+if (!process.env.CLOUDINARY_CLOUD_NAME) {
+	process.env.CLOUDINARY_CLOUD_NAME = "donx3kwwx";
+}
+if (!process.env.CLOUDINARY_API_KEY) {
+	process.env.CLOUDINARY_API_KEY = "928578277827456";
+}
+if (!process.env.CLOUDINARY_API_SECRET) {
+	process.env.CLOUDINARY_API_SECRET = "n-ErVExygaB76j6VgRYVmkCFTbk";
+}
+if (!process.env.GEMINI_API_KEY) {
+	process.env.GEMINI_API_KEY = "AIzaSyBmXm7QZ5y1JyP5lg5iKCThOvWwcSSEuWY";
+}
+if (!process.env.FRONTEND_URL) {
+	process.env.FRONTEND_URL = "http://localhost:3000";
+}
+
+if (process.env.NODE_ENV === "development") {
+	console.log("Environment check:");
+	console.log("MONGO_URI:", process.env.MONGO_URI ? "Found" : "Not found");
+	console.log("JWT_SECRET:", process.env.JWT_SECRET ? "Found" : "Not found");
+	console.log("Current directory:", __dirname);
+}
+
+const app = express();
+const PORT = process.env.PORT || 5000;
+
+// Middleware
+
+// CORS: reflect request origin and handle preflight
+app.use((req, res, next) => {
+	const origin = req.headers.origin;
+	const allowed = new Set([
+		process.env.FRONTEND_URL || "http://localhost:3000",
+		"http://localhost:3001",
+		"http://localhost:5173",
+	]);
+	if (!origin || allowed.has(origin)) {
+		if (origin) res.header("Access-Control-Allow-Origin", origin);
+		res.header("Access-Control-Allow-Credentials", "true");
+		res.header("Access-Control-Allow-Methods", "GET,POST,PUT,PATCH,DELETE,OPTIONS");
+		res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+		res.header("Vary", "Origin");
+	}
+	if (req.method === "OPTIONS") {
+		return res.sendStatus(204);
+	}
+	next();
+});
+app.use(express.json({ limit: "10mb" }));
+app.use(cookieParser());
+
+// Routes
+app.use("/api/auth", authRoutes);
+app.use("/api/files", medicalFileRoutes);
+app.use("/api/vitals", vitalsRoutes);
+
+// Health check endpoint
+app.get("/api/health", (req, res) => {
+	res.json({ 
+		success: true, 
+		message: "HealthMate API is running!",
+		timestamp: new Date().toISOString()
+	});
+});
+
+// Serve static files in production
+if (process.env.NODE_ENV === "production") {
+	app.use(express.static(path.join(__dirname, "/frontend/dist")));
+
+	app.get("*", (req, res) => {
+		res.sendFile(path.resolve(__dirname, "frontend", "dist", "index.html"));
+	});
+}
+
+// Error handling middleware
+app.use((err, req, res, next) => {
+	console.error(err.stack);
+	res.status(500).json({
+		success: false,
+		message: "Something went wrong!",
+		error: process.env.NODE_ENV === "development" ? err.message : "Internal server error",
+	});
+});
+
+if (process.env.NODE_ENV !== "test") {
+	app.listen(PORT, () => {
+		console.log(`🚀 HealthMate Server is running on http://localhost:${PORT}`);
+		console.log(`📊 Health check: http://localhost:${PORT}/api/health`);
+		connectDB();
+	});
+}
+
+export default app;
