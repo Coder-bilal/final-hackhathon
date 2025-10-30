@@ -33,7 +33,12 @@ export const authenticateToken = async (req, res, next) => {
 };
 
 export const generateToken = (userId) => {
-	return jwt.sign({ userId }, process.env.JWT_SECRET, {
-		expiresIn: "7d",
-	});
+  if (!process.env.JWT_SECRET) {
+    console.error("❌ JWT_SECRET not found in environment variables!");
+    throw new Error("Missing JWT_SECRET");
+  }
+
+  return jwt.sign({ userId }, process.env.JWT_SECRET, {
+    expiresIn: "7d",
+  });
 };

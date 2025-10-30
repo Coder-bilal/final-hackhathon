@@ -96,6 +96,9 @@ app.use("/api/auth", authRoutes);
 app.use("/api/files", medicalFileRoutes);
 app.use("/api/vitals", vitalsRoutes);
 app.use("/api/family", familyMemberRoutes);
+app.get("/", (req, res) => {
+	res.send("HealthMate API is running. Please use the frontend.");
+});
 
 // Health check endpoint
 app.get("/api/health", (req, res) => {
@@ -117,11 +120,11 @@ app.get("/api/health", (req, res) => {
 
 // Error handling middleware
 app.use((err, req, res, next) => {
-	console.error(err.stack);
+	console.error("==ERROR==", err.stack || err);
 	res.status(500).json({
 		success: false,
 		message: "Something went wrong!",
-		error: process.env.NODE_ENV === "development" ? err.message : "Internal server error",
+		error: process.env.NODE_ENV !== "production" ? (err.message || String(err)) : "Internal server error",
 	});
 });
 
