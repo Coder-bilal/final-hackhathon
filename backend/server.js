@@ -4,6 +4,7 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 import path from "path";
 import { fileURLToPath } from 'url';
+import mongoose from "mongoose";
 
 import authRoutes from "./routes/auth.route.js";
 import medicalFileRoutes from "./routes/medicalFile.route.js";
@@ -52,6 +53,18 @@ if (process.env.NODE_ENV === "development") {
 
 const app = express();
 let PORT = Number(process.env.PORT) || 5000;
+
+// Ensure DB connection in serverless before handling requests
+app.use(async (req, res, next) => {
+	try {
+		if (mongoose.connection.readyState !== 1) {
+			await connectDB();
+		}
+		next();
+	} catch (e) {
+		next(e);
+	}
+});
 
 // Middleware
 
