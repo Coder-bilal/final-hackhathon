@@ -3,23 +3,25 @@ import { X, FileText, Building, User, Calendar, DollarSign, MessageSquare } from
 
 const EditReportModal = ({ isOpen, onClose, onSave, initial }) => {
   const [form, setForm] = useState({
-    reportType: '',
+    testName: '',
     hospitalName: '',
     doctorName: '',
     reportDate: '',
     price: '',
-    notes: ''
+    notes: '',
+    title: '',
   })
 
   useEffect(() => {
     if (initial) {
       setForm({
-        reportType: initial.reportType || '',
+        testName: initial.testName || initial.reportType || '',
         hospitalName: initial.hospitalName || '',
         doctorName: initial.doctorName || '',
         reportDate: initial.reportDate ? String(initial.reportDate).slice(0,10) : '',
         price: initial.price ?? '',
-        notes: initial.notes || ''
+        notes: initial.notes || '',
+        title: initial.title || '',
       })
     }
   }, [initial])
@@ -44,43 +46,43 @@ const EditReportModal = ({ isOpen, onClose, onSave, initial }) => {
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-pink-500/20 flex items-center justify-center">
               <FileText className="w-5 h-5 text-pink-300" />
-            </div>
+           </div>
             <h3 className="text-lg font-semibold">Edit report</h3>
           </div>
           <button onClick={onClose} className="p-2 hover:bg-white/10 rounded-lg">
             <X className="w-5 h-5" />
           </button>
         </div>
-        <form onSubmit={submit} className="px-6 py-5 space-y-4">
-          <div className="relative">
-            <FileText className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-white/50" />
-            <input name="reportType" value={form.reportType} onChange={handleChange} placeholder="Test name" className="w-full pl-10 pr-3 py-3 rounded-xl bg-white/10 border border-white/15 focus:outline-none focus:ring-2 focus:ring-pink-500" />
-          </div>
-          <div className="relative">
-            <Building className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-white/50" />
-            <input name="hospitalName" value={form.hospitalName} onChange={handleChange} placeholder="Hospital / Lab" className="w-full pl-10 pr-3 py-3 rounded-xl bg-white/10 border border-white/15 focus:outline-none focus:ring-2 focus:ring-pink-500" />
-          </div>
-          <div className="relative">
-            <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-white/50" />
-            <input name="doctorName" value={form.doctorName} onChange={handleChange} placeholder="Doctor" className="w-full pl-10 pr-3 py-3 rounded-xl bg-white/10 border border-white/15 focus:outline-none focus:ring-2 focus:ring-pink-500" />
-          </div>
-          <div className="relative">
-            <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-white/50" />
-            <input type="date" name="reportDate" value={form.reportDate} onChange={handleChange} className="w-full pl-10 pr-3 py-3 rounded-xl bg-white/10 border border-white/15 focus:outline-none focus:ring-2 focus:ring-pink-500" />
-          </div>
-          <div className="relative">
-            <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-white/50" />
-            <input type="number" name="price" value={form.price} onChange={handleChange} placeholder="Price (Rs)" className="w-full pl-10 pr-3 py-3 rounded-xl bg-white/10 border border-white/15 focus:outline-none focus:ring-2 focus:ring-pink-500" />
-          </div>
-          <div className="relative">
-            <MessageSquare className="absolute left-3 top-3 w-5 h-5 text-white/50" />
-            <textarea name="notes" value={form.notes} onChange={handleChange} rows={3} placeholder="Notes" className="w-full pl-10 pr-3 py-3 rounded-xl bg-white/10 border border-white/15 focus:outline-none focus:ring-2 focus:ring-pink-500" />
-          </div>
-          <div className="flex items-center gap-3 pt-2">
-            <button type="button" onClick={onClose} className="flex-1 px-4 py-3 rounded-xl bg-white/10 hover:bg-white/15 transition">Cancel</button>
-            <button type="submit" className="flex-1 px-4 py-3 rounded-xl bg-gradient-to-r from-pink-500 to-orange-500 hover:from-pink-600 hover:to-orange-600 transition">Save</button>
-          </div>
-        </form>
+      <form onSubmit={submit} className="px-6 py-5 space-y-4">
+        <div className="relative">
+          <FileText className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-white/50" />
+          <input name="testName" value={form.testName} onChange={handleChange} placeholder="Test name" className="w-full pl-10 pr-3 py-3 rounded-xl bg-white/10 border border-white/15 focus:outline-none focus:ring-2 focus:ring-pink-500" />
+        </div>
+        <div className="relative">
+          <Building className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-white/50" />
+          <input name="hospitalName" value={form.hospitalName} onChange={handleChange} placeholder="Hospital / Lab" className="w-full pl-10 pr-3 py-3 rounded-xl bg-white/10 border border-white/15 focus:outline-none focus:ring-2 focus:ring-pink-500" />
+        </div>
+        <div className="relative">
+          <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-white/50" />
+          <input name="doctorName" value={form.doctorName} onChange={handleChange} placeholder="Doctor" className="w-full pl-10 pr-3 py-3 rounded-xl bg-white/10 border border-white/15 focus:outline-none focus:ring-2 focus:ring-pink-500" />
+        </div>
+        <div className="relative">
+          <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-white/50" />
+          <input type="date" name="reportDate" value={form.reportDate} onChange={handleChange} className="w-full pl-10 pr-3 py-3 rounded-xl bg-white/10 border border-white/15 focus:outline-none focus:ring-2 focus:ring-pink-500" />
+        </div>
+        <div className="relative">
+          <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-white/50" />
+          <input type="number" name="price" value={form.price} onChange={handleChange} placeholder="Price (Rs)" className="w-full pl-10 pr-3 py-3 rounded-xl bg-white/10 border border-white/15 focus:outline-none focus:ring-2 focus:ring-pink-500" />
+        </div>
+        <div className="relative">
+          <MessageSquare className="absolute left-3 top-3 w-5 h-5 text-white/50" />
+          <textarea name="notes" value={form.notes} onChange={handleChange} rows={3} placeholder="Notes" className="w-full pl-10 pr-3 py-3 rounded-xl bg-white/10 border border-white/15 focus:outline-none focus:ring-2 focus:ring-pink-500" />
+        </div>
+        <div className="flex items-center gap-3 pt-2">
+          <button type="button" onClick={onClose} className="flex-1 px-4 py-3 rounded-xl bg-white/10 hover:bg-white/15 transition">Cancel</button>
+          <button type="submit" className="flex-1 px-4 py-3 rounded-xl bg-gradient-to-r from-pink-500 to-orange-500 hover:from-pink-600 hover:to-orange-600 transition">Save</button>
+        </div>
+      </form>
       </div>
     </div>
   )
