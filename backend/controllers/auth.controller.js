@@ -63,6 +63,8 @@ export const login = async (req, res) => {
 	try {
 		const { email, password } = req.body;
 
+		console.log("Login attempt", { email: typeof email === "string" ? email : undefined });
+
 		// Find user by email
 		const user = await User.findOne({ email });
 		if (!user) {
@@ -106,6 +108,7 @@ export const login = async (req, res) => {
 			},
 		});
 	} catch (error) {
+		console.error("Login error:", error?.stack || error);
 		res.status(500).json({
 			success: false,
 			message: "Error logging in",

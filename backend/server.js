@@ -109,6 +109,9 @@ app.get("/api/health", (req, res) => {
 	});
 });
 
+// Quiet favicon requests to avoid 404 noise
+app.get('/favicon.ico', (req, res) => res.status(204).end());
+
 // // Serve static files in production
 // if (process.env.NODE_ENV === "production") {
 // 	app.use(express.static(path.join(__dirname, "/frontend/dist")));
