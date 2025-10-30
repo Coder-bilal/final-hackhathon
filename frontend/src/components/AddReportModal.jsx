@@ -51,6 +51,13 @@ const AddReportModal = ({ isOpen, onClose, onSave }) => {
     })
   }
 
+  const getFileNames = () => {
+    if (formData.files && formData.files.length > 0) {
+      return Array.from(formData.files).map(file => file.name).join(', ')
+    }
+    return 'No file chosen'
+  }
+
   if (!isOpen) return null
 
   return (
@@ -120,7 +127,7 @@ const AddReportModal = ({ isOpen, onClose, onSave }) => {
               >
                 <Upload className="w-5 h-5 text-gray-400 mr-2" />
                 <span className="text-gray-600">Choose files</span>
-                <span className="text-gray-400 ml-1">No file chosen</span>
+                <span className="text-gray-400 ml-1">{getFileNames()}</span>
               </label>
             </div>
           </div>

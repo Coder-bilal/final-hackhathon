@@ -1,0 +1,21 @@
+.premium-loader-outer {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: linear-gradient(135deg,#ff4f9a,#ffb86b,#7f5af0 58%,#22d3ee 100%);
+  box-shadow: 0 0 24px 6px #f472b6,0 0 48px 12px #8b5cf6bb;
+  animation: pulseGlow 1.3s infinite alternate;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.premium-loader-inner {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #fff6, #eab308, #ff4f9a);
+  box-shadow: 0 0 0 2px #fff7, 0 0 12px 8px #f0abfc44;
+  animation: spin 1.6s linear infinite;
+}
+@keyframes spin { 100% { transform: rotate(360deg);} }
+@keyframes pulseGlow { 100% { box-shadow: 0 0 38px 18px #7f5af0; } }

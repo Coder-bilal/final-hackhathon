@@ -1,8 +1,12 @@
-import { Link } from 'react-router-dom'
+import { Link, Navigate } from 'react-router-dom'
 import { Heart, ArrowRight, CheckCircle, Shield, Zap, Users } from 'lucide-react'
 import { motion } from 'framer-motion'
 
 const LandingPage = () => {
+  const token = localStorage.getItem('token');
+  if (token && token !== 'undefined' && token !== '') {
+    return <Navigate to="/dashboard" replace />
+  }
   return (
     <div className="min-h-screen relative overflow-hidden">
       {/* Premium Dynamic Background */}

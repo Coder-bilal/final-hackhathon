@@ -1,6 +1,7 @@
 import { Link, useNavigate } from 'react-router-dom'
 import { Heart, Mail, Lock, Eye, EyeOff, Check } from 'lucide-react'
 import { useState } from 'react'
+import PremiumLoader from '../components/PremiumLoader'
 
 const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false)
@@ -21,39 +22,42 @@ const LoginPage = () => {
   }
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
-    setLoading(true)
-    setError('')
+    e.preventDefault();
+    setLoading(true);
+    setError('');
+    // Always clear token before attempt (guard)
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
 
     try {
-      const response = await fetch('http://localhost:5000/api/auth/login', {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/auth/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(formData)
-      })
+      });
+      const data = await response.json();
 
-      const data = await response.json()
-
-      if (data.success) {
-        // Store token in localStorage
-        localStorage.setItem('token', data.token)
-        localStorage.setItem('user', JSON.stringify(data.user))
-        
-        // Redirect to dashboard
-        navigate('/dashboard')
+      if (data.success && data.token && data.token !== '' && data.token !== 'undefined') {
+        localStorage.setItem('token', data.token);
+        localStorage.setItem('user', JSON.stringify(data.user));
+        navigate('/dashboard');
       } else {
-        setError(data.message || 'Login failed')
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        setError(data.message || 'Login failed');
       }
     } catch (err) {
-      console.error('Login error:', err)
-      setError('Network error. Please try again.')
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      setError('Network error. Please try again.');
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
   }
 
+  if (loading) return <PremiumLoader label="Signing in..." />
   return (
     <div className="min-h-screen bg-gray-100 flex">
       {/* Left Section - Information */}

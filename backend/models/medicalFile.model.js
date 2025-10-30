@@ -15,6 +15,14 @@ const medicalFileSchema = new mongoose.Schema(
 			type: String,
 			required: true,
 		},
+		title: {
+			type: String,
+			required: false,
+		},
+		testName: {
+			type: String,
+			required: false,
+		},
 		fileUrl: {
 			type: String,
 			required: true,
@@ -55,6 +63,11 @@ const medicalFileSchema = new mongoose.Schema(
 			type: String,
 			required: false,
 		},
+		price: {
+			type: Number,
+			required: false,
+			min: 0,
+		},
 		fileSize: {
 			type: Number,
 			required: true,
@@ -62,6 +75,27 @@ const medicalFileSchema = new mongoose.Schema(
 		cloudinaryId: {
 			type: String,
 			required: true,
+		},
+		familyMemberId: {
+			type: mongoose.Schema.Types.ObjectId,
+			ref: "FamilyMember",
+			required: false
+		},
+		// Vitals
+		bpSystolic: {
+			type: Number,
+			required: false,
+			min: 0,
+		},
+		bpDiastolic: {
+			type: Number,
+			required: false,
+			min: 0,
+		},
+		sugar: {
+			type: Number,
+			required: false,
+			min: 0,
 		},
 	},
 	{
